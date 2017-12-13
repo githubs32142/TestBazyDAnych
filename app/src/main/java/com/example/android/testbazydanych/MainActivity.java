@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
         updateHeidht(db,"2","200");
         cursor= db.rawQuery("SELECT * FROM OSOBY",null);
         sendToLog(cursor);
-
+        selectPersonUnder(db,"180");
+        agvHeight(db);
     }
 
     private void sendToLog(Cursor cursor) {
@@ -56,7 +57,15 @@ public class MainActivity extends AppCompatActivity {
     private void updateHeidht(SQLiteDatabase bd,String id,String height){
         db.execSQL("UPDATE  OSOBY SET WZROST="+height+" WHERE ID="+id);
     }
-    private void selecrPersonUnder(String height){
-
+    private void selectPersonUnder(SQLiteDatabase db,String height){
+        Cursor cursor= db.rawQuery("SELECT * FROM OSOBY WHERE WZROST> "+height,null);
+        sendToLog(cursor);
+    }
+    private void agvHeight(SQLiteDatabase db){
+        Cursor cursor= db.rawQuery("SELECT AVG(WZROST) FROM OSOBY",null);
+        while (cursor.moveToNext()){;
+            double wzrost= cursor.getDouble(0);
+            Log.d("DB",String.valueOf(wzrost)+"\n");
+        }
     }
 }
